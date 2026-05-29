@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Student Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="bi bi-book-{{ 'gear' if edit else 'plus' }}"></i> {{ title }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="course_code" class="form-label">Course Code <span class="text-danger">*</span></label>
+                            {{ form.course_code(class="form-control" + (" is-invalid" if form.course_code.errors else ""), placeholder="e.g., CS101") }}
+                            {% for error in form.course_code.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="credits" class="form-label">Credits</label>
+                            {{ form.credits(class="form-control" + (" is-invalid" if form.credits.errors else ""), placeholder="3") }}
+                            {% for error in form.credits.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="course_name" class="form-label">Course Name <span class="text-danger">*</span></label>
+                        {{ form.course_name(class="form-control" + (" is-invalid" if form.course_name.errors else ""), placeholder="Introduction to Computer Science") }}
+                        {% for error in form.course_name.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), rows=4, placeholder="Brief description of the course...") }}
+                        {% for error in form.description.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        {{ form.submit(class="btn btn-success") }}
+                        <a href="{{ url_for('courses_list') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

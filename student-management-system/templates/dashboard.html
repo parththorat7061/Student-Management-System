@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Student Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard</h1>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title mb-0">Total Students</h5>
+                        <h2 class="mb-0 mt-2">{{ total_students }}</h2>
+                    </div>
+                    <i class="bi bi-people-fill display-4 opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center bg-transparent border-0">
+                <a href="{{ url_for('students_list') }}" class="text-white text-decoration-none">
+                    View all students <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-white bg-success h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title mb-0">Total Courses</h5>
+                        <h2 class="mb-0 mt-2">{{ total_courses }}</h2>
+                    </div>
+                    <i class="bi bi-book-fill display-4 opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center bg-transparent border-0">
+                <a href="{{ url_for('courses_list') }}" class="text-white text-decoration-none">
+                    View all courses <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-white bg-info h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title mb-0">Attendance Records</h5>
+                        <h2 class="mb-0 mt-2">{{ total_attendance }}</h2>
+                    </div>
+                    <i class="bi bi-calendar-check-fill display-4 opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center bg-transparent border-0">
+                <a href="{{ url_for('attendance_list') }}" class="text-white text-decoration-none">
+                    View attendance <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightning-fill"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="{{ url_for('student_add') }}" class="btn btn-primary">
+                        <i class="bi bi-person-plus-fill"></i> Add Student
+                    </a>
+                    <a href="{{ url_for('course_add') }}" class="btn btn-success">
+                        <i class="bi bi-plus-circle-fill"></i> Add Course
+                    </a>
+                    <a href="{{ url_for('attendance_mark') }}" class="btn btn-info text-white">
+                        <i class="bi bi-calendar-check"></i> Mark Attendance
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Students -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Students</h5>
+                <a href="{{ url_for('students_list') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if recent_students %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Enrollment #</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in recent_students %}
+                            <tr>
+                                <td>{{ student.enrollment_number }}</td>
+                                <td>
+                                    <a href="{{ url_for('student_detail', id=student.id) }}">
+                                        {{ student.get_full_name() }}
+                                    </a>
+                                </td>
+                                <td>{{ student.email }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-inbox display-4"></i>
+                    <p class="mt-2">No students yet. Add your first student!</p>
+                    <a href="{{ url_for('student_add') }}" class="btn btn-primary btn-sm">Add Student</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Low Attendance Students -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle-fill text-warning"></i> Low Attendance (< 75%)</h5>
+                <a href="{{ url_for('attendance_list') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if low_attendance_students %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Enrollment #</th>
+                                <th>Attendance %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in low_attendance_students %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('student_detail', id=item.student.id) }}">
+                                        {{ item.student.get_full_name() }}
+                                    </a>
+                                </td>
+                                <td>{{ item.student.enrollment_number }}</td>
+                                <td>
+                                    <span class="badge {% if item.percentage < 50 %}bg-danger{% elif item.percentage < 75 %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                                        {{ item.percentage }}%
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-check-circle display-4 text-success"></i>
+                    <p class="mt-2">All students have good attendance!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
