@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Mark Attendance - Student Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-calendar-check"></i> Mark Attendance</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        <label for="student_id" class="form-label">Student <span class="text-danger">*</span></label>
+                        {{ form.student_id(class="form-select" + (" is-invalid" if form.student_id.errors else "")) }}
+                        {% for error in form.student_id.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="course_id" class="form-label">Course <span class="text-danger">*</span></label>
+                        {{ form.course_id(class="form-select" + (" is-invalid" if form.course_id.errors else "")) }}
+                        {% for error in form.course_id.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="attendance_date" class="form-label">Date <span class="text-danger">*</span></label>
+                        {{ form.attendance_date(class="form-control" + (" is-invalid" if form.attendance_date.errors else "")) }}
+                        {% for error in form.attendance_date.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                        {{ form.status(class="form-select" + (" is-invalid" if form.status.errors else "")) }}
+                        {% for error in form.status.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="remarks" class="form-label">Remarks</label>
+                        {{ form.remarks(class="form-control" + (" is-invalid" if form.remarks.errors else ""), rows=3, placeholder="Optional remarks...") }}
+                        {% for error in form.remarks.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        {{ form.submit(class="btn btn-primary") }}
+                        <a href="{{ url_for('attendance_list') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Info Card -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6><i class="bi bi-info-circle"></i> Information</h6>
+                <ul class="mb-0 small text-muted">
+                    <li>Select a student from the dropdown</li>
+                    <li>Choose the course for attendance</li>
+                    <li>Pick the date (defaults to today)</li>
+                    <li>Select status: Present, Absent, or Late</li>
+                    <li>Add optional remarks if needed</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
